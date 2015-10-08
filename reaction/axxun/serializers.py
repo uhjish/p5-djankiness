@@ -22,4 +22,4 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class ActionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Action
-        fields = ('id','creator','assignee','description','done','deadline')
+        fields = ('id','creator','assignee','title','description','done','deadline')
