@@ -6,5 +6,5 @@ class Action(models.Model):
     assignee = models.ForeignKey(User, related_name='+')
     description = models.CharField(max_length=80)
     done = models.BooleanField()
-    deadline = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateTimeField(auto_now_add=False)
     updated = models.DateTimeField(auto_now_add=True)

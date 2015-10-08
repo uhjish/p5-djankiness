@@ -10,6 +10,7 @@ from reaction.axxun.serializers import (UserSerializer, GroupSerializer,
                                         ActionSerializer, RegistrationSerializer)
 from reaction.axxun.models import Action
 
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -45,8 +46,11 @@ class RegistrationView(APIView):
 class ActionView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
-        action = Action.objects.filter(creator=request.user.id)
+    def get(self, request, action_id=None):
+        if action_id:
+            action = Action.objects.filter(pk=action_id)
+        else:
+            action = Action.objects.filter(creator=request.user.id)
         serializer = ActionSerializer(action, many=True)
         return Response(serializer.data)
 
@@ -57,30 +61,17 @@ class ActionView(APIView):
                 status.HTTP_400_BAD_REQUEST)
         else:
             data = serializer.data
-            creator = request.user
-            assignee_id = data['assignee_id']
-            assignee = User.objects.get(id=assignee_id)
-            desc = data['description']
-            done = data['done']
-            deadline = data['deadline']
-            t = Action(creator=creator, description=data['description'], done=False)
-            t.save()
-            request.DATA['id'] = t.pk # return id
-            return Response(request.DATA, status=status.HTTP_201_CREATED)
+            t = serializer.save()
+            request.data['id'] = t.pk # return id
+            return Response(request.data, status=status.HTTP_201_CREATED)
 
     def put(self, request, action_id):
-        serializer = ActionSerializer(data=request.DATA)
+        action = Action.objects.get(pk=action_id)
+        serializer = ActionSerializer(action, data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=
                 status.HTTP_400_BAD_REQUEST)
         else:
             data = serializer.data
-            assignee_id = data['assignee_id']
-            assignee = User.objects.get(id=assignee_id)
-            desc = data['description']
-            done = data['done']
-            deadline = data['deadline']
-            t = Action(id=action_id, creator=request.user, description=desc,\
-                     done=done, updated=datetime.now())
-            t.save()
+            t = serializer.save()
             return Response(status=status.HTTP_200_OK)
