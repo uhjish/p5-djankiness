@@ -19,7 +19,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ('username', 'password')
 
 
-class ActionSerializer(serializers.ModelSerializer):
+class ActionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Action
         fields = ('id','creator','assignee','description','done','deadline')

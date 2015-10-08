@@ -26,13 +26,19 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+class ActionViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Action.objects.all()
+    serializer_class = ActionSerializer
+
 class RegistrationView(APIView):
     permission_classes = ()
 
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
 
-        # Check format and unique constraint
         if not serializer.is_valid():
             return Response(serializer.errors,\
                             status=status.HTTP_400_BAD_REQUEST)
@@ -43,35 +49,3 @@ class RegistrationView(APIView):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-class ActionView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, action_id=None):
-        if action_id:
-            action = Action.objects.filter(pk=action_id)
-        else:
-            action = Action.objects.filter(creator=request.user.id)
-        serializer = ActionSerializer(action, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = ActionSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=
-                status.HTTP_400_BAD_REQUEST)
-        else:
-            data = serializer.data
-            t = serializer.save()
-            request.data['id'] = t.pk # return id
-            return Response(request.data, status=status.HTTP_201_CREATED)
-
-    def put(self, request, action_id):
-        action = Action.objects.get(pk=action_id)
-        serializer = ActionSerializer(action, data=request.data, partial=True)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=
-                status.HTTP_400_BAD_REQUEST)
-        else:
-            data = serializer.data
-            t = serializer.save()
-            return Response(status=status.HTTP_200_OK)

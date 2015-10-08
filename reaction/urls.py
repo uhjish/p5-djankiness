@@ -21,6 +21,7 @@ from reaction.axxun import views
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
+router.register(r'actions', views.ActionViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -31,8 +32,8 @@ urlpatterns = [
     url(r'^register/$', views.RegistrationView.as_view()),
 
     # Action endpoint
-    url(r'^action/$', views.ActionView.as_view()),
-    url(r'^action/(?P<action_id>[0-9]*)$', views.ActionView.as_view()),
+    #url(r'^action/$', views.ActionView.as_view()),
+    #url(r'^action/(?P<action_id>[0-9]*)$', views.ActionView.as_view()),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
