@@ -47,3 +47,5 @@ class RegistrationView(APIView):
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+def index(request):
+    return render(request, 'index.html', context={})
