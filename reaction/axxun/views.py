@@ -27,9 +27,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
 
 class ActionViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
+    permission_classes = ()
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
 
