@@ -1,6 +1,14 @@
 "use strict";
-angular.module('action', ['restangular', 'ngRoute', 'ui.bootstrap']).
-  config(function($routeProvider, RestangularProvider) {
+
+//just define every inline to make it easier to evaluate
+//typically this would be broken out into separate js files
+// -- my structure usually puts the controllers, services, and directives
+// for a given concern within the app into one folder
+// as opposed to separating by type (module, service, directive, etc).
+
+var actionApp = angular.module('action', ['restangular', 'ngRoute', 'ui.bootstrap'])
+
+actionApp.config(function($routeProvider, RestangularProvider) {
   RestangularProvider.setBaseUrl('/api/');
   RestangularProvider.setRequestSuffix('/');
   RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
@@ -24,29 +32,30 @@ angular.module('action', ['restangular', 'ngRoute', 'ui.bootstrap']).
     }
     return newResponse;
   });
+
   $routeProvider.
     when('/', {
-    controller:ListCtrl, 
+    controller:'ListCtrl', 
     templateUrl:'list.html'
   }).
     when('/edit/:actionId', {
-    controller:EditCtrl, 
+    controller:'EditCtrl', 
     templateUrl:'detail.html',
     resolve: {
       axn: function(Restangular, $route){
         let actionId =$route.current.params.actionId;
-        console.log("actionId: " + actionId);
         return Restangular.one('actions', actionId).get();
       },
     }
   }).
-    when('/new', {controller:CreateCtrl, templateUrl:'detail.html'}).
+    when('/new', {controller:'CreateCtrl', templateUrl:'detail.html'}).
     otherwise({redirectTo:'/'});
 
 });
 
 
-function ListCtrl($scope, Restangular) {
+actionApp.controller('ListCtrl', 
+function($scope, Restangular) {
   $scope.actions = Restangular.all("actions").getList().$object;
   Restangular.all("users").getList().then(
     // this shared logic would typically go into a service
@@ -56,10 +65,10 @@ function ListCtrl($scope, Restangular) {
         $scope.usernames[u] = ulist[u].username;
       }
     });
-}
+});
 
-
-function CreateCtrl($scope, $location, Restangular) {
+actionApp.controller('CreateCtrl', 
+function($scope, $location, Restangular) {
   Restangular.all("users").getList().then(
     function(ulist){
       $scope.usernames = {};
@@ -72,8 +81,9 @@ function CreateCtrl($scope, $location, Restangular) {
       $location.path('/list');
     });
   }
-}
+});
 
+actionApp.controller('EditCtrl', 
 function EditCtrl($scope, $location, Restangular, axn) {
   var original = axn;
   $scope.action = Restangular.copy(original);
@@ -100,4 +110,6 @@ function EditCtrl($scope, $location, Restangular, axn) {
       $location.path('/');
     });
   };
-}
+});
+
+
