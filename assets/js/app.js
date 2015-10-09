@@ -7,7 +7,13 @@
 
 var actionApp = angular.module('actionApp', ['restangular', 'ngRoute', 'ui.bootstrap']);
 
-actionApp.config(function($routeProvider, RestangularProvider) {
+actionApp.config(function($routeProvider, $httpProvider, RestangularProvider) {
+
+  //csrf goodness
+  $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+  $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+  //api base path and django-rest helping suffix
   RestangularProvider.setBaseUrl('/api/');
   RestangularProvider.setRequestSuffix('/');
   RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
