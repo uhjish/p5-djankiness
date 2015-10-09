@@ -7,5 +7,5 @@ class Action(models.Model):
     title = models.CharField(max_length=80)
     description = models.CharField(max_length=160)
     done = models.BooleanField()
-    deadline = models.DateTimeField(auto_now_add=False)
-    updated = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateField(auto_now_add=False)
+    updated = models.DateField(auto_now_add=True)

@@ -5,7 +5,7 @@ from models import Action
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'groups')
+        fields = ('id','url', 'username', 'email', 'groups')
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,7 +19,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ('username', 'password')
 
 
-class ActionSerializer(serializers.HyperlinkedModelSerializer):
+class ActionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Action
         fields = ('id','creator','assignee','title','description','done','deadline')
