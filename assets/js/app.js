@@ -1,12 +1,11 @@
 "use strict";
-
 //just define every inline to make it easier to evaluate
 //typically this would be broken out into separate js files
 // -- my structure usually puts the controllers, services, and directives
 // for a given concern within the app into one folder
 // as opposed to separating by type (module, service, directive, etc).
 
-var actionApp = angular.module('action', ['restangular', 'ngRoute', 'ui.bootstrap'])
+var actionApp = angular.module('actionApp', ['restangular', 'ngRoute', 'ui.bootstrap']);
 
 actionApp.config(function($routeProvider, RestangularProvider) {
   RestangularProvider.setBaseUrl('/api/');
@@ -19,7 +18,7 @@ actionApp.config(function($routeProvider, RestangularProvider) {
     }
     
     return elem;
-  })
+  });
 
   RestangularProvider.setResponseExtractor(function(response, operation, what, url) {
     // unwrap the list from the results field returned by the default
@@ -52,7 +51,6 @@ actionApp.config(function($routeProvider, RestangularProvider) {
     otherwise({redirectTo:'/'});
 
 });
-
 
 actionApp.controller('ListCtrl', 
 function($scope, Restangular) {
@@ -112,4 +110,42 @@ function EditCtrl($scope, $location, Restangular, axn) {
   };
 });
 
+actionApp.directive('ngActionTimeline', function() {
+  return {
+    restrict: 'AE',
+    scope: {
+      data: '=',     // Bind the ngModel
+      onSelect: '=',    // Pass a reference to the method 
+    },
 
+    link: function(scope, iElement, iAttrs) {
+      scope.data = new vis.DataSet([
+        {id: 1, content: 'item 1', start: '2013-04-20'},
+        {id: 2, content: 'item 2', start: '2013-04-14'},
+        {id: 3, content: 'item 3', start: '2013-04-18'},
+        {id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19'},
+        {id: 5, content: 'item 5', start: '2013-04-25'},
+        {id: 6, content: 'item 6', start: '2013-04-27'}
+      ]);
+
+      var options = {
+        editable: false
+      };
+      var timeline = null;
+      scope.$watch('data', function () {
+        if (scope.data == null) {
+          return;
+        }
+
+        if (timeline != null) {
+          timeline.destroy();
+        }
+        timeline = new vis.Timeline(iElement[0], scope.data, options);
+        timeline.on('select', function (properties) {
+          console.log('select', properties);
+        });
+      });
+
+    },
+  }
+});

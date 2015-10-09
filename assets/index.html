@@ -7,6 +7,7 @@
     <title>Action Manager</title>
     <script>document.write('<base href="' + document.location + '" />');</script>
     <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.css">
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.js"></script>
     <script src="http://code.angularjs.org/1.2.4/angular-route.js"></script>
@@ -14,15 +15,19 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/restangular/1.5.1/restangular.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap.min.js"></script>
-    <script src="js/app.js"></script>
+<!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"</script>
+-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.js"></script>
+ <script src="js/app.js"></script>
   </head>
 
   <body>
-    <div ng-app="action">
+    <div ng-app="actionApp">
       <div ng-view></div>
 
       <!-- CACHE FILE: list.html -->
       <script type="text/ng-template" id="list.html">
+        <ng-action-timeline data="actions" onSelect="actions"></ng-action-timeline>
         <table>
           <thead>
             <tr>
