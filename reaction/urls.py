@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from rest_framework import routers
 from reaction.axxun import views
@@ -19,5 +19,9 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^api/register/$', views.RegistrationView.as_view()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^$', views.index, name='index')
+
 ]
+urlpatterns += patterns( 'django.contrib.staticfiles.views',
+                        url(r'^(?:index.html)?$', 'serve', kwargs={'path': 'index.html'}),
+                        url(r'^(?P<path>(?:js|css|img)/.*)$', 'serve'),
+)
