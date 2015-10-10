@@ -25,21 +25,7 @@ actionApp.config(function($routeProvider, $httpProvider, RestangularProvider) {
     
     return elem;
   });
-/*
-  RestangularProvider.setResponseExtractor(function(response, operation, what, url) {
-    // unwrap the list from the results field returned by the default
-    // django viewset
-    var newResponse;
-    if (operation === "getList") {
-      //for when we use pagination
-      newResponse = response.results;
-      console.log(newResponse.length);
-    } else {
-      newResponse = response;
-    }
-    return newResponse;
-  });
-*/
+
   $routeProvider.
     when('/', {
     controller:'ListCtrl', 
@@ -163,7 +149,9 @@ actionApp.directive('ngActionTimeline', function() {
       var tdata = new vis.DataSet([{id: 'M', content: 'This Month', 
                         start: startDate, end: endDate, type: 'background'}]);
       var options = {
-        editable: false
+        editable: false,
+        start: today.startOf('month').subtract(1,'month').format('YYYY-MM-DD'),
+        end: today.endOf('month').add(2,'month').format('YYYY-MM-DD'),
       };
       var timeline = null;
       var statusToClass = function(status){
