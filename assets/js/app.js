@@ -25,19 +25,21 @@ actionApp.config(function($routeProvider, $httpProvider, RestangularProvider) {
     
     return elem;
   });
-
+/*
   RestangularProvider.setResponseExtractor(function(response, operation, what, url) {
     // unwrap the list from the results field returned by the default
     // django viewset
     var newResponse;
     if (operation === "getList") {
+      //for when we use pagination
       newResponse = response.results;
+      console.log(newResponse.length);
     } else {
       newResponse = response;
     }
     return newResponse;
   });
-
+*/
   $routeProvider.
     when('/', {
     controller:'ListCtrl', 
@@ -63,7 +65,11 @@ function($scope, $location, Restangular) {
   $scope.jumpTo = function( aid ){
     $location.path('/edit/' + aid);
   }
-  $scope.actions = Restangular.all("actions").getList().$object;
+  Restangular.all("actions").getList().then(
+    function(alist){
+      $scope.actions = alist;
+    }
+  );
   Restangular.all("users").getList().then(
     // this shared logic would typically go into a service
     function(ulist){

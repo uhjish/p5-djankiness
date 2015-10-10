@@ -40,7 +40,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="action in actions | orderBy:'action.deadline'" ng-show="action.id">
+            <tr ng-repeat="action in actions">
               <td>{{usernames[action.assignee]}}</td>
               <td>{{action.title}}</td>
               <td>{{action.deadline}}</td>
