@@ -2,7 +2,7 @@
 
 Basic Django-REST app with an AngularJS frontend (VisJS directive)
 
-Was hacked together in a few hours and as such is missing tests and production build optimizations.
+Was hacked together in a few hours and as such is missing tests, docs, tox, and production build optimizations.
 
 ### Deployment
 
@@ -25,7 +25,6 @@ There should be some indication of the actions relative to the current month.
 Also, a marker for whether the task is finished.
 
 Standard CRUD operations through REST verbs should be allowed for Actions.
-
 
 ### Caveats
 
