@@ -48,7 +48,7 @@ actionApp.config(function($routeProvider, $httpProvider, RestangularProvider) {
     templateUrl:'detail.html',
     resolve: {
       axn: function(Restangular, $route){
-        let actionId =$route.current.params.actionId;
+        var actionId =$route.current.params.actionId;
         return Restangular.one('actions', actionId).get();
       },
     }
