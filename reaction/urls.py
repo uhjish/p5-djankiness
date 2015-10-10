@@ -3,6 +3,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 from rest_framework import routers
 from reaction.axxun import views
+from reaction.axxun import models
+
+#overkill since we already have the rest-framework UI
+admin.site.register(models.Action)
 
 #RESTive without a bunch of boilerplate
 router = routers.DefaultRouter()
@@ -10,8 +14,6 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'actions', views.ActionViewSet)
 
-#make sure admin picks up defined models
-admin.autodiscover()
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
