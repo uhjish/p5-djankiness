@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import authentication, permissions
+from django.contrib.staticfiles.views import serve
 from django.contrib.auth.decorators import login_required
 from reaction.axxun.serializers import (UserSerializer, GroupSerializer, 
                                         ActionSerializer, RegistrationSerializer)
@@ -53,5 +54,5 @@ class RegistrationView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @login_required(login_url='/api-auth/login/?next=/')
-def index(request):
-    return render(request, 'index.html', context={})
+def protected_serve(request, path, insecure=False, **kwargs):
+    return serve(request, path, insecure, **kwargs)

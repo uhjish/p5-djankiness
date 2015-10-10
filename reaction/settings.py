@@ -32,6 +32,7 @@ STATICFILES_DIRS = (
     # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
 )
 
+
 WEBPACK_LOADER = {
  'DEFAULT': {
     'BUNDLE_DIR_NAME': 'bundles/',

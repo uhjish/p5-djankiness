@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
 ]
-urlpatterns += patterns( 'django.contrib.staticfiles.views',
-                        url(r'^(?:index.html)?$', 'serve', kwargs={'path': 'index.html'}),
-                        url(r'^(?P<path>(?:js|css|img)/.*)$', 'serve'),
+urlpatterns += patterns( '',
+                        url(r'^(?:index.html)?$', views.protected_serve, kwargs={'path': 'index.html'}),
+                        url(r'^(?P<path>(?:js|css|img)/.*)$', views.protected_serve),
 )
