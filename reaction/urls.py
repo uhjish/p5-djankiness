@@ -1,4 +1,5 @@
 from django.conf.urls import include, url, patterns
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 from rest_framework import routers
 from reaction.axxun import views
@@ -25,3 +26,4 @@ urlpatterns += patterns( '',
                         url(r'^(?:index.html)?$', views.protected_serve, kwargs={'path': 'index.html'}),
                         url(r'^(?P<path>(?:js|css|img)/.*)$', views.protected_serve),
 )
+urlpatterns += staticfiles_urlpatterns()
