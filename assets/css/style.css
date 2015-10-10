@@ -8,4 +8,11 @@
 .vis-item.todo {
 }
 
+.vis-item.vis-selected {
+  background-color: white;
+  border-color: black;
+  color: black;
+  box-shadow: 0 0 10px gray;
+}
+
 

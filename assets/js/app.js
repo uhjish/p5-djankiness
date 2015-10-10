@@ -169,7 +169,7 @@ actionApp.directive('ngActionTimeline', function() {
           tdata.add( {  id: d.id, 
                         group: d.assignee,
                         content: d.title +
-                          ' <span style="color:#97B0F8;">(' + scope.tusers[d.assignee] + ')</span>',
+                          ' <span style="color:#7F00FF;">(' + scope.tusers[d.assignee] + ')</span>',
                         start: d.deadline,
                         className: statusToClass(d.done),
                         type: 'box' } );

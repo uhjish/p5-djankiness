@@ -6,14 +6,20 @@
     <meta charset="utf-8" />
     <title>Action Manager</title>
     <script>document.write('<base href="' + document.location + '" />');</script>
+    <!--
     <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css">
+    -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.css">
     <link rel="stylesheet" href="css/style.css" />
   
     <!-- it's like 1995 in here. TODO: requirejs, uglify, browserify/webpack, compilestatic workflow -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
-    <script src="http://code.angularjs.org/1.4.7/angular-route.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+    <script type="text/javascript" src="http://code.angularjs.org/1.4.7/angular-route.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/restangular/1.5.1/restangular.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
@@ -29,14 +35,14 @@
 
       <script type="text/ng-template" id="list.html">
         <ng-action-timeline tactions="actions" tusers="usernames" on-select="jumpTo"></ng-action-timeline>
-        <table>
+        <table class="table">
           <thead>
             <tr>
               <th>Assignee</th>
               <th>Title</th>
               <th>Deadline</th>
               <th>Description</th>
-              <th><a href="#/new"><i class="icon-plus-sign"></i></a></th>
+              <th><a href="#/new"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></th>
             </tr>
           </thead>
           <tbody>
@@ -46,7 +52,7 @@
               <td>{{action.deadline}}</td>
               <td>{{action.description}}</td>
               <td>
-                <a href="#/edit/{{action.id}}"><i class="icon-pencil"></i></a>
+                <a href="#/edit/{{action.id}}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
               </td>
             </tr>
           </tbody>
@@ -56,33 +62,41 @@
 
 
       <script type="text/ng-template" id="detail.html">
-        <form name="actionForm">
-          <div>
-            <label>Title</label>
-            <input type="text" name="title" ng-model="action.title" required>
-            <span ng-show="actionForm.title.$error.required" class="help-inline">
-              Required</span>
-          </div>
-          <label>Assignee</label>
-          <select ng-model="action.assignee" ng-options="toInt(k) as v for (k, v) in usernames">
-            <option value="">Select User</option>
-          </select>
-          <label>Done?</label>
-          <input type="checkbox" ng-model="action.done">
-          <label>Description</label>
-          <textarea name="description" ng-model="action.description"></textarea>
-          <div>
-            <label>Deadline</label>
-            <input type="date" class="form-control" uib-datepicker-popup ng-model="deadline_date" is-open="status.opened" ng-required="true" />
-          </div>
-          <br>
+        <div class="col-md-4 col-sm-6">
+          <form name="actionForm">
+            <div class="form-group">
+              <label>Title</label><br/>
+              <input type="text" name="title" ng-model="action.title" required>
+              <span ng-show="actionForm.title.$error.required" class="help-inline">
+                Required</span>
+            </div>
+            <div class="form-group">
+              <label>Assignee</label><br/>
+              <select ng-model="action.assignee" ng-options="toInt(k) as v for (k, v) in usernames">
+                <option value="">Select User</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Done?</label>
+              <input type="checkbox" ng-model="action.done">
+            </div>
+            <div class="form-group">
+              <label>Description</label><br/>
+              <textarea name="description" ng-model="action.description"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Deadline</label>
+              <input type="date" class="form-control" uib-datepicker-popup ng-model="deadline_date" is-open="status.opened" ng-required="true" />
+            </div>
+            <br>
 
-          <a href="#/" class="btn">Cancel</a>
-          <button ng-click="save()" ng-disabled="isClean() || actionForm.$invalid"
-            class="btn btn-primary">Save</button>
-          <button ng-click="destroy()"
-            ng-show="action.id" class="btn btn-danger">Delete</button>
-        </form>
+            <a href="#/" class="btn btn-default">Cancel</a>
+            <button ng-click="save()" ng-disabled="isClean() || actionForm.$invalid"
+              class="btn btn-primary">Save</button>
+            <button ng-click="destroy()"
+              ng-show="action.id" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
       </script>
     </div>
 
