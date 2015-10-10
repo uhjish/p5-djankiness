@@ -59,20 +59,33 @@ actionApp.config(function($routeProvider, $httpProvider, RestangularProvider) {
 });
 
 actionApp.controller('ListCtrl', 
-function($scope, Restangular) {
+function($scope, $location, Restangular) {
+  $scope.jumpTo = function( aid ){
+    $location.path('/edit/' + aid);
+  }
   $scope.actions = Restangular.all("actions").getList().$object;
   Restangular.all("users").getList().then(
     // this shared logic would typically go into a service
     function(ulist){
       $scope.usernames = {};
       for (var u in Restangular.stripRestangular(ulist)){
-        $scope.usernames[u] = ulist[u].username;
+        $scope.usernames[ulist[u].id] = ulist[u].username;
       }
     });
 });
 
 actionApp.controller('CreateCtrl', 
 function($scope, $location, Restangular) {
+  var strToDate = function( dstr ){
+    return moment(dstr).toDate();
+  };
+  $scope.toInt = function(val) {
+    return parseInt(val,10); 
+  };
+
+  //setting up defaults leads to better sleep
+  $scope.action = {creator: 1, assignee: 1, title: '', description: '', deadline: '2015-01-01', done: false};
+  $scope.deadline_date = strToDate( $scope.action.deadline );
   Restangular.all("users").getList().then(
     function(ulist){
       $scope.usernames = {};
@@ -81,6 +94,9 @@ function($scope, $location, Restangular) {
       }
     });
   $scope.save = function() {
+    //this gets overriden on the server
+    //fetch the date from the picker bound model
+    $scope.action.deadline = moment($scope.deadline_date).format('YYYY-MM-DD');;
     Restangular.all('actions').post($scope.action).then(function(action) {
       $location.path('/list');
     });
@@ -88,10 +104,19 @@ function($scope, $location, Restangular) {
 });
 
 actionApp.controller('EditCtrl', 
-function EditCtrl($scope, $location, Restangular, axn) {
+function($scope, $location, Restangular, axn) {
   var original = axn;
+  $scope.toInt = function(val) {
+    return parseInt(val,10); 
+  };
+
   $scope.action = Restangular.copy(original);
 
+  var strToDate = function( dstr ){
+    return moment(dstr).toDate();
+  };
+
+  $scope.deadline_date = strToDate( $scope.action.deadline );
   Restangular.all("users").getList().then(
     function(ulist){
       $scope.usernames = {};
@@ -100,7 +125,7 @@ function EditCtrl($scope, $location, Restangular, axn) {
       }
     });
   $scope.isClean = function() {
-    return angular.equals(original, $scope.action);
+    return angular.equals(original, $scope.action) && $scope.deadline_date == strToDate(original.deadline);
   }
 
   $scope.destroy = function() {
@@ -108,8 +133,8 @@ function EditCtrl($scope, $location, Restangular, axn) {
       $location.path('/list');
     });
   };
-
   $scope.save = function() {
+    $scope.action.deadline = moment($scope.deadline_date).format('YYYY-MM-DD');;
     $scope.action.put().then(function() {
       $location.path('/');
     });
@@ -120,38 +145,68 @@ actionApp.directive('ngActionTimeline', function() {
   return {
     restrict: 'AE',
     scope: {
-      data: '=',     // Bind the ngModel
-      onSelect: '=',    // Pass a reference to the method 
+      tactions: '=',
+      tusers: '=',
+      onSelect: '&',
     },
-
     link: function(scope, iElement, iAttrs) {
-      scope.data = new vis.DataSet([
-        {id: 1, content: 'item 1', start: '2013-04-20'},
-        {id: 2, content: 'item 2', start: '2013-04-14'},
-        {id: 3, content: 'item 3', start: '2013-04-18'},
-        {id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19'},
-        {id: 5, content: 'item 5', start: '2013-04-25'},
-        {id: 6, content: 'item 6', start: '2013-04-27'}
-      ]);
-
+      var groups = new vis.DataSet();
+      var tdata = new vis.DataSet();
       var options = {
         editable: false
       };
       var timeline = null;
-      scope.$watch('data', function () {
-        if (scope.data == null) {
+      var statusToClass = function(status){
+        if (status){
+          return "done";
+        }else{
+          return "todo";
+        }
+      };
+      scope.$watchGroup(['tusers','tactions'], function () {
+        if (scope.tusers == null || scope.tactions == null) {
           return;
+        }
+        scope.tactions.forEach( function( d ){
+          tdata.add( {  id: d.id, 
+                        group: d.assignee,
+                        content: d.title +
+                          ' <span style="color:#97B0F8;">(' + scope.tusers[d.assignee] + ')</span>',
+                        start: d.deadline,
+                        className: statusToClass(d.done),
+                        type: 'box' } );
+        });
+        for(var k in scope.tusers){
+          //TODO: bring in lodash to avoid this sort of logic
+          if (scope.tusers.hasOwnProperty(k)) {
+            groups.add( {id: k, content: scope.tusers[k]} );
+          }
         }
 
         if (timeline != null) {
           timeline.destroy();
         }
-        timeline = new vis.Timeline(iElement[0], scope.data, options);
+        timeline = new vis.Timeline(iElement[0]);
+        timeline.setOptions(options);
+        timeline.setGroups(groups);
+        timeline.setItems(tdata);
         timeline.on('select', function (properties) {
           console.log('select', properties);
+          //TODO: fix this.
+          scope.onSelect( {aid: properties.items[0]} );
         });
       });
 
     },
   }
+});
+
+actionApp.filter('stringToDate', function () {
+    return function (input) {
+        if (!input)
+            return null;
+
+        var date = moment(input);
+        return date.isValid() ? date.toDate() : null;
+    };
 });

@@ -30,6 +30,10 @@ class ActionViewSet(viewsets.ModelViewSet):
     permission_classes = ()
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
+    def perform_create(self, serializer):
+        #post requests can come in without a creator
+        #this should be inferred from the user making the req
+        serializer.save(creator=self.request.user)
 
 class RegistrationView(APIView):
     permission_classes = ()

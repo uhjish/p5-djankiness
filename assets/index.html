@@ -9,12 +9,13 @@
     <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.css">
     <link rel="stylesheet" href="css/style.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.js"></script>
-    <script src="http://code.angularjs.org/1.2.4/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+    <script src="http://code.angularjs.org/1.4.7/angular-route.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/restangular/1.5.1/restangular.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"</script>
 -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.js"></script>
@@ -27,7 +28,7 @@
 
       <!-- CACHE FILE: list.html -->
       <script type="text/ng-template" id="list.html">
-        <ng-action-timeline data="actions" onSelect="actions"></ng-action-timeline>
+        <ng-action-timeline tactions="actions" tusers="usernames" on-select="jumpTo"></ng-action-timeline>
         <table>
           <thead>
             <tr>
@@ -58,23 +59,22 @@
       <script type="text/ng-template" id="detail.html">
         <form name="actionForm">
           <div>
-            <label>Name</label>
+            <label>Title</label>
             <input type="text" name="title" ng-model="action.title" required>
             <span ng-show="actionForm.title.$error.required" class="help-inline">
               Required</span>
           </div>
           <label>Assignee</label>
-          <select ng-model="action.assignee">
-            <option ng-selected="{{uid == action.assignee}}" 
-                    ng-repeat="(uid,uname) in usernames" value={{uid}}>
-              {{uname}}
-            </option>
+          <select ng-model="action.assignee" ng-options="toInt(k) as v for (k, v) in usernames">
+            <option value="">Select User</option>
           </select>
+          <label>Done?</label>
+          <input type="checkbox" ng-model="action.done">
           <label>Description</label>
           <textarea name="description" ng-model="action.description"></textarea>
           <div>
             <label>Deadline</label>
-            <input type="date" class="form-control" uib-datepicker-popup ng-model="action.deadline" is-open="status.opened" ng-required="true" />
+            <input type="date" class="form-control" uib-datepicker-popup ng-model="deadline_date" is-open="status.opened" ng-required="true" />
           </div>
           <br>
 

@@ -1,1 +1,11 @@
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.vis-item.done {
+  background-color: greenyellow;
+  border-color: green;
+}
+
+.vis-item.todo {
+}
+
+
