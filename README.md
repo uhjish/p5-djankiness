@@ -4,6 +4,15 @@ Basic Django-REST app with an AngularJS frontend (VisJS directive)
 
 Was hacked together in a few hours and as such is missing tests and production build optimizations.
 
+### Deployment
+
+- App: [p5-djankiness.herokuapp.com](http://p5-djankiness.herokuapp.com)
+- user: admin, password: password
+- REST-Framework console: [p5-djankiness.herokuapp.com/api/](http://p5-djankiness.herokuapp.com/api/)
+- Admin console: [p5-djankiness.herokuapp.com/admin/](http://p5-djankiness.herokuapp.com/admin/)
+- To register a new user: post json {"username":"user", "password":"pass"} to /api/register after authenticating
+- or use the admin console
+
 #### Goal is to show a set of Action with associated features:
 
 1. Title
@@ -17,14 +26,6 @@ Also, a marker for whether the task is finished.
 
 Standard CRUD operations through REST verbs should be allowed for Actions.
 
-### Deployment
-
-- App: [p5-djankiness.herokuapp.com](http://p5-djankiness.herokuapp.com)
-- user: admin, password: password
-- REST-Framework console: [p5-djankiness.herokuapp.com/api/](http://p5-djankiness.herokuapp.com/api/)
-- Admin console: [p5-djankiness.herokuapp.com/api/](http://p5-djankiness.herokuapp.com/api/)
-- To register a new user: post json {"username":"user", "password":"pass"} to /api/register after authenticating
-- or use the admin console
 
 ### Caveats
 
