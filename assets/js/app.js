@@ -82,9 +82,9 @@ function($scope, $location, Restangular) {
   $scope.toInt = function(val) {
     return parseInt(val,10); 
   };
-
+  var today = moment(new Date()).format("YYYY-MM-DD");
   //setting up defaults leads to better sleep
-  $scope.action = {creator: 1, assignee: 1, title: '', description: '', deadline: '2015-01-01', done: false};
+  $scope.action = {creator: 1, assignee: 1, title: '', description: '', deadline: today, done: false};
   $scope.deadline_date = strToDate( $scope.action.deadline );
   Restangular.all("users").getList().then(
     function(ulist){
@@ -151,7 +151,11 @@ actionApp.directive('ngActionTimeline', function() {
     },
     link: function(scope, iElement, iAttrs) {
       var groups = new vis.DataSet();
-      var tdata = new vis.DataSet();
+      var today = moment(new Date());
+      var startDate = today.startOf('month').format('YYYY-MM-DD');
+      var endDate = today.endOf('month').format('YYYY-MM-DD');
+      var tdata = new vis.DataSet([{id: 'M', content: 'This Month', 
+                        start: startDate, end: endDate, type: 'background'}]);
       var options = {
         editable: false
       };

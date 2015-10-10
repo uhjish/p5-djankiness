@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="http://getbootstrap.com/2.3.2/assets/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.css">
     <link rel="stylesheet" href="css/style.css" />
+  
+    <!-- it's like 1995 in here. TODO: requirejs, uglify, browserify/webpack, compilestatic workflow -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
     <script src="http://code.angularjs.org/1.4.7/angular-route.js"></script>
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
@@ -16,17 +19,14 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-<!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"</script>
--->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.js"></script>
- <script src="js/app.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.9.0/vis.min.js"></script>
+    <script src="js/app.js"></script>
   </head>
 
   <body>
     <div ng-app="actionApp">
       <div ng-view></div>
 
-      <!-- CACHE FILE: list.html -->
       <script type="text/ng-template" id="list.html">
         <ng-action-timeline tactions="actions" tusers="usernames" on-select="jumpTo"></ng-action-timeline>
         <table>
@@ -40,7 +40,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="action in actions | filter:search | orderBy:'title'" ng-show="action.id">
+            <tr ng-repeat="action in actions | orderBy:'action.deadline'" ng-show="action.id">
               <td>{{usernames[action.assignee]}}</td>
               <td>{{action.title}}</td>
               <td>{{action.deadline}}</td>
@@ -55,7 +55,6 @@
 
 
 
-      <!-- CACHE FILE: detail.html -->
       <script type="text/ng-template" id="detail.html">
         <form name="actionForm">
           <div>
