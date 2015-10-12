@@ -14,22 +14,18 @@ from reaction.axxun.models import Action
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
+    permission_classes = (IsAuthenticated, IsAdminUser)
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
+    permission_classes = (IsAuthenticated, IsAdminUser)
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 class ActionViewSet(viewsets.ModelViewSet):
-    permission_classes = ()
+    permission_classes = (IsAuthenticated,)
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
     def perform_create(self, serializer):
@@ -38,8 +34,7 @@ class ActionViewSet(viewsets.ModelViewSet):
         serializer.save(creator=self.request.user)
 
 class RegistrationView(APIView):
-    permission_classes = ()
-
+    permission_classes = (IsAuthenticated, IsAdminUser)
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
 
